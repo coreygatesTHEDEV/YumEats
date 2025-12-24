@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
-import { IoIosArrowDropleftCircle, IoIosArrowDropRightCircle } from "react-icons/io";
-
+import { IoIosArrowDropleftCircle, IoIosArrowDroprightCircle } from "react-icons/io";
+import {RxDotFilled} from 'react-icons/rx'
 
 export default function Featured() {
     const sliders = [
@@ -12,11 +12,30 @@ export default function Featured() {
         url: 'https://res.cloudinary.com/ehizeex-shop/image/upload/v1672672452/NetflixApp/pizza_osjb4f.jpg'
         },
         {
-        url: 'https://res.cloudinary.com/ehizeex-shop/image/upload/v1672672612/NetflixApp/ric_a4ewxo.jpg',
+        
+          url: 'https://res.cloudinary.com/ehizeex-shop/image/upload/v1672672612/NetflixApp/ric_a4ewxo.jpg',
         }
     ]
 
     const [currentIndex, setCurrentIndex] = useState(0)
+
+    //for previous slider button
+    const prevSlider = ()=>{
+      const isFirstSlide = currentIndex === 0
+      const newIndex = isFirstSlide ? sliders.length -1 : currentIndex -1 
+      setCurrentIndex(newIndex)
+    }
+
+    //for next slider button
+    const nextSlider = ()=>{
+      const isLastSlide = currentIndex === sliders.length - 1
+      const newIndex = isLastSlide ? 0 : currentIndex + 1 
+      setCurrentIndex(newIndex)
+    }
+
+    const MoveToNextSlide = (slideIndex) => {
+      setCurrentIndex(slideIndex)
+    }
 
   return (
     <div className = 'max-w-full h-[500px] w-full py-4 px-4 relative'> 
@@ -25,12 +44,25 @@ export default function Featured() {
             //access the sliders array, get the objects url to show the image
             {backgroundImage: `url(${sliders[currentIndex].url})`}
         }>
-        <button className='text-white rounded-full text-bold'>
-                  <div className='pr-3'>
-                    <IoIosArrowDropleftCircle size={65}/> 
-                  </div>
-        </button>         
+          <div className='absolute top-[50%] -translate-x-0 translate-y-[-50%] left-5 text-2xl rounded-full p-2 bg-orange-700 text-white cursor-pointer'>
+            <IoIosArrowDropleftCircle onClick={prevSlider}/> 
+          </div> 
+           <div className='absolute top-[50%] -translate-x-0 translate-y-[50%]  right-5 text-2xl rounded-full p-2 bg-orange-700 text-white cursor-pointer'>
+            <IoIosArrowDroprightCircle onClick={nextSlider}/> 
+          </div>   
         </div>
+        <div className='flex top-4 justify-center py-2'>
+            {
+              sliders.map((sliderItems, slideIndex)=>(
+                <div 
+                  key={slideIndex}
+                  onClick={()=>MoveToNextSlide(slideIndex)}
+                  className='text-2xl cursor-pointer'>
+                  <RxDotFilled/>
+                </div>
+              ))
+            }
+        </div>  
     </div>
   )
 }
